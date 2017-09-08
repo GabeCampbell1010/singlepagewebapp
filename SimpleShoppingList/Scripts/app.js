@@ -7,7 +7,7 @@ function createShoppingList() {
     currentList.items = new Array();
 
     //web service call
-    $.ajax({//this is getting the shopping list from the internet or something
+    $.ajax({
         type: "POST",
         dataType: "json",
         url: "api/ShoppingListsEF/",
@@ -41,17 +41,17 @@ function showShoppingList() {
 
 function addItem() {
     var newItem = {};
-    newItem.name = $("#newItemName").val();//take the name from the input box with id newItemName, # is how you call by id
+    newItem.name = $("#newItemName").val();//take the name from the input box with id newItemName
     newItem.shoppingListId = currentList.id;
 
-    $.ajax({//this is getting the shopping list from the internet or something
+    $.ajax({
         type: "POST",
         dataType: "json",
-        url: "api/ItemsEF/",//cuz item controller
+        url: "api/ItemsEF/",
         data: newItem,
         success: function (result) {
             currentList = result;
-            drawItems();//call draw items function
+            drawItems();
             $("#newItemName").val("");//trying to clear the input box after adding an item
         }
     });    
@@ -78,13 +78,13 @@ function drawItems() {
 }
 
 function deleteItem(itemId) {
-    $.ajax({//this is getting the shopping list from the internet or something
+    $.ajax({//
         type: "DELETE",
         dataType: "json",
-        url: "api/ItemsEF/" + itemId,//cuz item controller
+        url: "api/ItemsEF/" + itemId,
         success: function (result) {
             currentList = result;
-            drawItems();//call draw items function
+            drawItems();
         }
     });
 }
@@ -94,21 +94,21 @@ function checkItem(itemId) {//check and uncheck items on the list when clicking 
     var changedItem = {};
 
     for (var i = 0; i < currentList.items.length; i++) {
-        if (currentList.items[i].id === itemId) {//why does it want === and not ==
+        if (currentList.items[i].id === itemId) {
             changedItem = currentList.items[i];
         }
     }
 
     changedItem.checked = !changedItem.checked;
 
-    $.ajax({//this is getting the shopping list from the internet or something
+    $.ajax({
         type: "PUT",
         dataType: "json",
-        url: "api/ItemsEF/" + itemId,//cuz item controller
+        url: "api/ItemsEF/" + itemId,
         data: changedItem,
         success: function (result) {
             changedItem = result;
-            drawItems();//call draw items function
+            drawItems();
             
         }
     });
@@ -116,7 +116,7 @@ function checkItem(itemId) {//check and uncheck items on the list when clicking 
 
 function getShoppingListById(id) {
 
-    $.ajax({//this is getting the shopping list from the internet or something
+    $.ajax({
         type: "GET",
         dataType: "json",
         url: "api/ShoppingListsEF/" + id,
@@ -124,10 +124,7 @@ function getShoppingListById(id) {
             currentList = result;
             showShoppingList();
             drawItems();
-        }//,
-        //error: function () {
-        //    console.error("error");//this just shows in the console, check jquery documentation for how to throw error cases better
-        //}
+        }
     });
 
 }
@@ -154,7 +151,7 @@ $(document).ready(function () {
 
     var pageUrl = window.location.href;
     var idIndex = pageUrl.indexOf("?id=");
-    if (idIndex !== -1) {//this is, if there is a unique id//!= or !==? VS doesn't like != here
+    if (idIndex !== -1) {
         getShoppingListById(pageUrl.substring(idIndex + 4));
     }
 
